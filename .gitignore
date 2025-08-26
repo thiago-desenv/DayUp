@@ -15,6 +15,15 @@ captures/
 *.aab
 *.apk
 output-metadata.json
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/local.properties
+
 
 # IntelliJ
 *.iml
