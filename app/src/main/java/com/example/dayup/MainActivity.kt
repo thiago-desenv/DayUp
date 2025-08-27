@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -33,7 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -92,6 +92,7 @@ fun CounterApp(modifier: Modifier = Modifier) {
             Text(
                 text = taskTitle,
                 style = MaterialTheme.typography.headlineMedium.copy(fontSize = 70.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 32.dp, bottom = 24.dp)
             )
 
@@ -116,7 +117,7 @@ fun CounterApp(modifier: Modifier = Modifier) {
                     Text(
                         text = "Dias",
                         style = MaterialTheme.typography.bodyMedium.copy(fontSize = 22.sp),
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -126,6 +127,10 @@ fun CounterApp(modifier: Modifier = Modifier) {
             Button(
                 onClick = { count++ },
                 shape = RoundedCornerShape(15.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
