@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness4
@@ -25,6 +26,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -51,58 +53,63 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var darkThemeEnabled by remember { mutableStateOf(false) }
+            DayUpApp()
+        }
+    }
+}
 
-            val drawerState = rememberDrawerState(DrawerValue.Closed)
-            val scope = rememberCoroutineScope()
+@Composable
+fun DayUpApp() {
+    var darkThemeEnabled by remember { mutableStateOf(false) }
 
-            DayUpTheme(darkTheme = darkThemeEnabled) {
-                ModalNavigationDrawer(
-                    drawerState = drawerState,
-                    drawerContent = {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text("Configurações", style = MaterialTheme.typography.titleMedium)
-                            Spacer(modifier = Modifier.height(20.dp))
-                            Button(onClick = { darkThemeEnabled = !darkThemeEnabled }) {
-                                Icon(
-                                    imageVector = if(darkThemeEnabled) Icons.Default.Brightness7 else Icons.Default.Brightness4,
-                                    contentDescription = "Alterar tema",
-                                    modifier = Modifier.padding(end = 8.dp)
-                                )
-                                Text(if(darkThemeEnabled) "Tema claro" else "Tema escuro")
-                            }
-                        }
-                    }
-                ) {
-                    Scaffold(
-                        bottomBar = {
-                            NavigationBar {
-                                NavigationBarItem(
-                                    selected = true,
-                                    onClick = { },
-                                    icon = { Icon(Icons.Default.Home, contentDescription = "Início") }
-                                )
-                                NavigationBarItem(
-                                    selected = false,
-                                    onClick = { },
-                                    icon = { Icon(Icons.Default.Check, contentDescription = "Progresso") }
-                                )
-                                NavigationBarItem(
-                                    selected = false,
-                                    onClick = {
-                                        scope.launch { drawerState.open() }
-                                    },
-                                    icon = { Icon(Icons.Default.Menu, contentDescription = "Menu") }
-                                )
-                            }
-                        }
-                    ) { innerPadding ->
-                        CounterApp(
-                            modifier = Modifier.padding(innerPadding)
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet(modifier = Modifier.width(200.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Configurações", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Button(onClick = { darkThemeEnabled = !darkThemeEnabled }) {
+                        Icon(
+                            imageVector = if (darkThemeEnabled) Icons.Default.Brightness7 else Icons.Default.Brightness4,
+                            contentDescription = "Alterar tema",
+                            modifier = Modifier.padding(end = 8.dp)
                         )
+                        Text(if (darkThemeEnabled) "Tema claro" else "Tema escuro")
                     }
                 }
             }
+        }
+    ) {
+        Scaffold(
+            bottomBar = {
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = true,
+                        onClick = { },
+                        icon = { Icon(Icons.Default.Home, contentDescription = "Início") }
+                    )
+                    NavigationBarItem(
+                        selected = false,
+                        onClick = { },
+                        icon = { Icon(Icons.Default.Check, contentDescription = "Progresso") }
+                    )
+                    NavigationBarItem(
+                        selected = false,
+                        onClick = {
+                            scope.launch { drawerState.open() }
+                        },
+                        icon = { Icon(Icons.Default.Menu, contentDescription = "Menu") }
+                    )
+                }
+            }
+        ) { innerPadding ->
+            CounterApp(
+                modifier = Modifier.padding(innerPadding)
+            )
         }
     }
 }
