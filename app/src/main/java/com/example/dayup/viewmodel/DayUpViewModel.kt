@@ -1,15 +1,17 @@
-package com.example.dayup.ui
+package com.example.dayup.viewmodel
 
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 class DayUpViewModel : ViewModel() {
-    var darkThemeEnabled = androidx.compose.runtime.mutableStateOf(false)
+    var darkThemeEnabled = mutableStateOf(false)
         private set
 
-    var count = androidx.compose.runtime.mutableIntStateOf(0)
+    var count = mutableIntStateOf(0)
         private set
 
-    var taskTitle = androidx.compose.runtime.mutableStateOf("Estudar")
+    var taskTitle = mutableStateOf("Estudar")
         private set
 
     fun toggleTheme() {
