@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Drawercontent(onToggleTheme: () -> Unit, darkThemeEnabled: Boolean ) {
+fun DrawerContent(onToggleTheme: () -> Unit, darkThemeEnabled: Boolean ) {
     ModalDrawerSheet(modifier = Modifier.width(200.dp)) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text("Configurações", style = MaterialTheme.typography.titleMedium)
