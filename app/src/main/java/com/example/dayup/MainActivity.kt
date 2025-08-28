@@ -61,55 +61,59 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DayUpApp() {
     var darkThemeEnabled by remember { mutableStateOf(false) }
-
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet(modifier = Modifier.width(200.dp)) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Configurações", style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Button(onClick = { darkThemeEnabled = !darkThemeEnabled }) {
-                        Icon(
-                            imageVector = if (darkThemeEnabled) Icons.Default.Brightness7 else Icons.Default.Brightness4,
-                            contentDescription = "Alterar tema",
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Text(if (darkThemeEnabled) "Tema claro" else "Tema escuro")
+    DayUpTheme(darkTheme = darkThemeEnabled) {
+        val drawerState = rememberDrawerState(
+            initialValue = DrawerValue.Closed
+        )
+
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                ModalDrawerSheet(modifier = Modifier.width(200.dp)) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text("Configurações", style = MaterialTheme.typography.titleMedium)
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Button(onClick = { darkThemeEnabled = !darkThemeEnabled }) {
+                            Icon(
+                                imageVector = if (darkThemeEnabled) Icons.Default.Brightness7 else Icons.Default.Brightness4,
+                                contentDescription = "Alterar tema",
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(if (darkThemeEnabled) "Tema claro" else "Tema escuro")
+                        }
                     }
                 }
             }
-        }
-    ) {
-        Scaffold(
-            bottomBar = {
-                NavigationBar {
-                    NavigationBarItem(
-                        selected = true,
-                        onClick = { },
-                        icon = { Icon(Icons.Default.Home, contentDescription = "Início") }
-                    )
-                    NavigationBarItem(
-                        selected = false,
-                        onClick = { },
-                        icon = { Icon(Icons.Default.Check, contentDescription = "Progresso") }
-                    )
-                    NavigationBarItem(
-                        selected = false,
-                        onClick = {
-                            scope.launch { drawerState.open() }
-                        },
-                        icon = { Icon(Icons.Default.Menu, contentDescription = "Menu") }
-                    )
+        ) {
+            Scaffold(
+                bottomBar = {
+                    NavigationBar {
+                        NavigationBarItem(
+                            selected = true,
+                            onClick = { },
+                            icon = { Icon(Icons.Default.Home, contentDescription = "Início") }
+                        )
+                        NavigationBarItem(
+                            selected = false,
+                            onClick = { },
+                            icon = { Icon(Icons.Default.Check, contentDescription = "Progresso") }
+                        )
+                        NavigationBarItem(
+                            selected = false,
+                            onClick = {
+                                scope.launch { drawerState.open() }
+                            },
+                            icon = { Icon(Icons.Default.Menu, contentDescription = "Menu") }
+                        )
+                    }
                 }
+            ) { innerPadding ->
+                CounterApp(
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
-        ) { innerPadding ->
-            CounterApp(
-                modifier = Modifier.padding(innerPadding)
-            )
         }
     }
 }
