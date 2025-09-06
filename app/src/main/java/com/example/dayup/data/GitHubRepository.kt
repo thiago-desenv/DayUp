@@ -1,5 +1,6 @@
 package com.example.dayup.data
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -35,7 +36,10 @@ class GitHubRepository {
                 val pushedAt = Instant.parse(pushedAtStr).atZone(ZoneId.systemDefault())
                 repos.add(RepoInfo(name, pushedAt))
             }
-        } finally {
+        } catch(e: Exception) {
+            Log.e("GitHubRepository", "Erro ao buscar repositórios", e)
+        }
+        finally {
             connection.disconnect()
         }
 

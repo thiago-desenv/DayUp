@@ -49,7 +49,13 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
                     taskTitle = viewModel.taskTitle.value,
                     count = count,
                     hasCommitToday = viewModel.hasCommitToday.value,
-                    onCheckCommit = { viewModel.checkTodayCommit("thiago-desenv") }
+                    onCheckCommit = {
+                        viewModel.checkTodayCommit("thiago-desenv")
+                        if(!viewModel.hasCommitToday.value) {
+                            viewModel.incrementCounter()
+                            viewModel.hasCommitToday.value = true
+                        }
+                    }
                 )
             }
         }
