@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val darkTheme by viewModel.darkThemeEnabled.collectAsState()
+    val count by viewModel.count.collectAsState()
     val scope = rememberCoroutineScope()
 
     DayUpTheme(darkTheme = darkTheme) {
@@ -46,7 +47,7 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
                 CounterScreen(
                     modifier = Modifier.padding(innerPadding),
                     taskTitle = viewModel.taskTitle.value,
-                    count = viewModel.count.intValue,
+                    count = count,
                     onAddClick = { viewModel.incrementCounter() }
                 )
             }
