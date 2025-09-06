@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness4
@@ -28,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -77,13 +79,17 @@ fun CounterScreen(modifier: Modifier, taskTitle: String, count: Int, onAddClick:
             .fillMaxSize()
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = taskTitle,
-            style = MaterialTheme.typography.headlineMedium.copy(fontSize = 70.sp),
+            style = MaterialTheme.typography.headlineMedium.copy(
+                fontSize = 60.sp,
+                lineHeight = 50.sp
+            ),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 32.dp, bottom = 24.dp)
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 32.dp, bottom = 24.dp),
         )
 
         Card(

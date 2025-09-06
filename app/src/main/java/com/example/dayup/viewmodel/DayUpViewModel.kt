@@ -27,7 +27,7 @@ class DayUpViewModel(context: Context) : ViewModel() {
             runBlocking { appPreferences.getCounter().first() }
         )
 
-    var taskTitle = mutableStateOf("Estudar")
+    var taskTitle = mutableStateOf("Estudar programação")
         private set
 
     fun toggleTheme() {
