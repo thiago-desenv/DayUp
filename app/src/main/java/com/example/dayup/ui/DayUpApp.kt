@@ -48,7 +48,8 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
                     modifier = Modifier.padding(innerPadding),
                     taskTitle = viewModel.taskTitle.value,
                     count = count,
-                    onAddClick = { viewModel.incrementCounter() }
+                    hasCommitToday = viewModel.hasCommitToday.value,
+                    onCheckCommit = { viewModel.checkTodayCommit("thiago-desenv") }
                 )
             }
         }
@@ -61,13 +62,18 @@ fun PreviewCounter() {
     val darkTheme = remember { mutableStateOf(false) }
     val count = remember { mutableIntStateOf(0) }
     val taskTitle = remember { mutableStateOf("Estudar") }
+    val hasCommitToday = remember { mutableStateOf(false) }
 
     DayUpTheme(darkTheme = darkTheme.value) {
         CounterScreen(
             modifier = Modifier.padding(16.dp),
             taskTitle = taskTitle.value,
             count = count.intValue,
-            onAddClick = { count.intValue++ }
+            hasCommitToday = hasCommitToday.value,
+            onCheckCommit = {
+                count.intValue++
+                hasCommitToday.value = true
+            }
         )
     }
 }

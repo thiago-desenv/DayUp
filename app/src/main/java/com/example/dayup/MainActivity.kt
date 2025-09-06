@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import com.example.dayup.ui.DayUpApp
 import com.example.dayup.viewmodel.DayUpViewModel
 import com.example.dayup.viewmodel.DayUpViewModelFactory
+import com.jakewharton.threetenabp.AndroidThreeTen
 
 class MainActivity : ComponentActivity() {
     private val dayUpViewModel: DayUpViewModel by viewModels {
@@ -16,6 +17,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidThreeTen.init(this)
         enableEdgeToEdge()
         setContent {
             DayUpApp(viewModel = dayUpViewModel)

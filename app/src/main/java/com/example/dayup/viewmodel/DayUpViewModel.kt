@@ -5,15 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dayup.data.AppPreferences
+import com.example.dayup.data.GitHubRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.threeten.bp.LocalDate
 
 class DayUpViewModel(context: Context) : ViewModel() {
     private val appPreferences = AppPreferences(context)
+    private val gitHubRepo = GitHubRepository()
 
     var darkThemeEnabled: StateFlow<Boolean> = appPreferences.getTheme()
         .stateIn(viewModelScope,
@@ -26,6 +29,9 @@ class DayUpViewModel(context: Context) : ViewModel() {
             SharingStarted.WhileSubscribed(5000),
             runBlocking { appPreferences.getCounter().first() }
         )
+
+    var hasCommitToday = mutableStateOf(false)
+        private set
 
     var taskTitle = mutableStateOf("Estudar programação")
         private set
@@ -45,5 +51,18 @@ class DayUpViewModel(context: Context) : ViewModel() {
 
     fun setTaskTitle(title: String) {
         taskTitle.value = title
+    }
+
+    fun checkTodayCommit(username: String) {
+        viewModelScope.launch {
+            try {
+                val repos = gitHubRepo.getUserRepos(username)
+                val today = LocalDate.now()
+
+                hasCommitToday.value = repos.any { it.pushedAt.toLocalDate() == today }
+            } catch (e: Exception) {
+                hasCommitToday.value = false
+            }
+        }
     }
 }

@@ -73,7 +73,7 @@ fun BottomNavigationBar( onMenuClick: () -> Unit ) {
 }
 
 @Composable
-fun CounterScreen(modifier: Modifier, taskTitle: String, count: Int, onAddClick: () -> Unit) {
+fun CounterScreen(modifier: Modifier, taskTitle: String, count: Int, hasCommitToday: Boolean, onCheckCommit: () -> Unit) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -121,7 +121,7 @@ fun CounterScreen(modifier: Modifier, taskTitle: String, count: Int, onAddClick:
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = onAddClick,
+            onClick = onCheckCommit,
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -132,7 +132,23 @@ fun CounterScreen(modifier: Modifier, taskTitle: String, count: Int, onAddClick:
                 .height(60.dp)
                 .padding(horizontal = 16.dp)
         ) {
-            Text(text = "Adicionar", fontSize = 18.sp)
+            Text(text = "Estudou hoje?", fontSize = 18.sp)
+        }
+
+        Spacer(modifier = modifier.height(12.dp))
+
+        if(hasCommitToday)  {
+            Text(
+                text = "Você já realizou commit hoje!",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.secondary
+            )
+        } else {
+            Text(
+                text = "Nenhum commit realizado hoje",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
