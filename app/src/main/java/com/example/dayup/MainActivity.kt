@@ -7,9 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import com.example.dayup.ui.DayUpApp
 import com.example.dayup.viewmodel.DayUpViewModel
+import com.example.dayup.viewmodel.DayUpViewModelFactory
 
 class MainActivity : ComponentActivity() {
-    private val dayUpViewModel: DayUpViewModel by viewModels()
+    private val dayUpViewModel: DayUpViewModel by viewModels {
+        DayUpViewModelFactory(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -6,9 +6,15 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dayup.ui.theme.DayUpTheme
 import com.example.dayup.viewmodel.DayUpViewModel
@@ -17,15 +23,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val darkTheme by viewModel.darkThemeEnabled.collectAsState()
     val scope = rememberCoroutineScope()
 
-    DayUpTheme(darkTheme = viewModel.darkThemeEnabled.value) {
+    DayUpTheme(darkTheme = darkTheme) {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
                 DrawerContent(
                     onToggleTheme = { viewModel.toggleTheme() },
-                    darkThemeEnabled = viewModel.darkThemeEnabled.value
+                    darkThemeEnabled = darkTheme
                 )
             }
         ) {
@@ -50,6 +57,16 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewCounter() {
-    val fakeVm = DayUpViewModel()
-    DayUpApp(viewModel = fakeVm)
+    val darkTheme = remember { mutableStateOf(false) }
+    val count = remember { mutableIntStateOf(0) }
+    val taskTitle = remember { mutableStateOf("Estudar") }
+
+    DayUpTheme(darkTheme = darkTheme.value) {
+        CounterScreen(
+            modifier = Modifier.padding(16.dp),
+            taskTitle = taskTitle.value,
+            count = count.intValue,
+            onAddClick = { count.intValue++ }
+        )
+    }
 }
