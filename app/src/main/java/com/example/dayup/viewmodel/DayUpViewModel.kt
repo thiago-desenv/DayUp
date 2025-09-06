@@ -7,31 +7,39 @@ import androidx.lifecycle.viewModelScope
 import com.example.dayup.data.AppPreferences
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class DayUpViewModel(context: Context) : ViewModel() {
-    private val AppPreferences = AppPreferences(context)
+    private val appPreferences = AppPreferences(context)
 
-    var darkThemeEnabled: StateFlow<Boolean> = AppPreferences.getTheme()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    var darkThemeEnabled: StateFlow<Boolean> = appPreferences.getTheme()
+        .stateIn(viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            runBlocking { appPreferences.getTheme().first() }
+        )
 
-    var count: StateFlow<Int> = AppPreferences.getCounter()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
+    var count: StateFlow<Int> = appPreferences.getCounter()
+        .stateIn(viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            runBlocking { appPreferences.getCounter().first() }
+        )
 
     var taskTitle = mutableStateOf("Estudar")
         private set
 
     fun toggleTheme() {
         viewModelScope.launch {
-            AppPreferences.saveTheme(!darkThemeEnabled.value)
+            appPreferences.saveTheme(!darkThemeEnabled.value)
         }
     }
 
     fun incrementCounter() {
         viewModelScope.launch {
             val current = count.value
-            AppPreferences.saveCounter(current + 1)
+            appPreferences.saveCounter(current + 1)
         }
     }
 
