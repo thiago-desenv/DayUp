@@ -50,10 +50,13 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
                     count = count,
                     hasCommitToday = viewModel.hasCommitToday.value,
                     onCheckCommit = {
-                        if(!viewModel.hasCommitToday.value) {
-                            viewModel.checkTodayCommit("thiago-desenv")
-                            viewModel.incrementCounter()
-                            viewModel.hasCommitToday.value = true
+                        scope.launch {
+                            if(!viewModel.hasCommitToday.value) {
+                                if(viewModel.checkTodayCommit("thiago-desenv")) {
+                                    viewModel.incrementCounter()
+                                    viewModel.hasCommitToday.value = true
+                                }
+                            }
                         }
                     }
                 )

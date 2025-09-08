@@ -53,16 +53,13 @@ class DayUpViewModel(context: Context) : ViewModel() {
         taskTitle.value = title
     }
 
-    fun checkTodayCommit(username: String) {
-        viewModelScope.launch {
-            try {
-                val repos = gitHubRepo.getUserRepos(username)
-                val today = LocalDate.now()
-
-                hasCommitToday.value = repos.any { it.pushedAt.toLocalDate() == today }
-            } catch (e: Exception) {
-                hasCommitToday.value = false
-            }
+    suspend fun checkTodayCommit(username: String): Boolean {
+        return try {
+            val repos = gitHubRepo.getUserRepos(username)
+            val today = LocalDate.now()
+            repos.any { it.pushedAt.toLocalDate() == today }
+        } catch (e: Exception) {
+            false
         }
     }
 }
