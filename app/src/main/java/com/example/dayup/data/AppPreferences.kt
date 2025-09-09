@@ -17,6 +17,7 @@ class AppPreferences(private val context: Context) {
         private val THEME_KEY = booleanPreferencesKey("dar_theme")
         private val COUNTER_KEY = intPreferencesKey("counter")
         private val LAST_COMMIT_DATE_KEY = stringPreferencesKey("last_commit_date")
+        private val USERNAME_KEY = stringPreferencesKey("username")
     }
 
     suspend fun saveTheme(isDarkMode: Boolean) {
@@ -52,6 +53,18 @@ class AppPreferences(private val context: Context) {
     fun getLastCommitDate(): Flow<LocalDate?> {
         return context.dataStore.data.map { preferences ->
             preferences[LAST_COMMIT_DATE_KEY]?.let { LocalDate.parse(it) }
+        }
+    }
+
+    suspend fun saveUsername(username: String) {
+        context.dataStore.edit { preferences ->
+            preferences[USERNAME_KEY] = username
+        }
+    }
+
+    fun getUsername(): Flow<String> {
+        return context.dataStore.data.map { preferences ->
+            preferences[USERNAME_KEY] ?: ""
         }
     }
 }

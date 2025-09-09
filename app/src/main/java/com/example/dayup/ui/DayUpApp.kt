@@ -48,21 +48,34 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
                     )
                 }
             ) { innerPadding ->
-                CounterScreen(
-                    modifier = Modifier.padding(innerPadding),
-                    taskTitle = viewModel.taskTitle.value,
-                    count = count,
-                    hasCommitToday = viewModel.hasCommitToday.value,
-                    onCheckCommit = {
-                        viewModel.tryIncrementIfCommit("thiago-desenv") {
-                            scope.launch {
-                                if (snackbarHostState.currentSnackbarData == null) {
-                                    snackbarHostState.showSnackbar("A verificação já foi realizada hoje")
+                val username = viewModel.username.collectAsState().value
+                if(username.isBlank()) {
+                    UsernameScreen(
+                        modifier = Modifier.padding(innerPadding),
+                        onSaveUsername = { newUsername ->
+                            viewModel.setUsername(newUsername)
+                        }
+                    )
+                } else {
+                    CounterScreen(
+                        modifier = Modifier.padding(innerPadding),
+                        taskTitle = viewModel.taskTitle.value,
+                        count = count,
+                        hasCommitToday = viewModel.hasCommitToday.value,
+                        onCheckCommit = {
+                            val username = viewModel.username.value
+                            if(username.isNotBlank()) {
+                                viewModel.tryIncrementIfCommit(username) {
+                                    scope.launch {
+                                        if (snackbarHostState.currentSnackbarData == null) {
+                                            snackbarHostState.showSnackbar("A verificação já foi realizada hoje")
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }

@@ -30,6 +30,12 @@ class DayUpViewModel(context: Context) : ViewModel() {
             runBlocking { appPreferences.getCounter().first() }
         )
 
+    var username: StateFlow<String> = appPreferences.getUsername()
+        .stateIn(viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            runBlocking { appPreferences.getUsername().first() }
+        )
+
     var hasCommitToday = mutableStateOf(false)
         private set
 
@@ -89,6 +95,12 @@ class DayUpViewModel(context: Context) : ViewModel() {
             } else {
                 onAlreadyDone()
             }
+        }
+    }
+
+    fun setUsername(pUsername: String) {
+        viewModelScope.launch {
+            appPreferences.saveUsername(pUsername)
         }
     }
 }
