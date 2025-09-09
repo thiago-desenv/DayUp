@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +27,7 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val darkTheme by viewModel.darkThemeEnabled.collectAsState()
     val count by viewModel.count.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     DayUpTheme(darkTheme = darkTheme) {
@@ -38,6 +41,7 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
             }
         ) {
             Scaffold(
+                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
                 bottomBar = {
                     BottomNavigationBar(
                         onMenuClick = { scope.launch { drawerState.open() } }
@@ -50,11 +54,10 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
                     count = count,
                     hasCommitToday = viewModel.hasCommitToday.value,
                     onCheckCommit = {
-                        scope.launch {
-                            if(!viewModel.hasCommitToday.value) {
-                                if(viewModel.checkTodayCommit("thiago-desenv")) {
-                                    viewModel.incrementCounter()
-                                    viewModel.hasCommitToday.value = true
+                        viewModel.tryIncrementIfCommit("thiago-desenv") {
+                            scope.launch {
+                                if (snackbarHostState.currentSnackbarData == null) {
+                                    snackbarHostState.showSnackbar("A verificação já foi realizada hoje")
                                 }
                             }
                         }
