@@ -69,10 +69,10 @@ class DayUpViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun canIncrementToday(): Boolean {
+    fun hasIncrementToday(): Boolean {
         val today = LocalDate.now()
         val lastCommitDate = runBlocking { appPreferences.getLastCommitDate().first() }
-        return lastCommitDate != today
+        return lastCommitDate == today
     }
 
     fun markCommitDoneToday() {
@@ -84,7 +84,7 @@ class DayUpViewModel(context: Context) : ViewModel() {
 
     fun tryIncrementIfCommit(username: String, onAlreadyDone: () -> Unit, onNoCommitToday: () -> Unit) {
         viewModelScope.launch {
-            if(canIncrementToday()) {
+            if(!hasIncrementToday()) {
                 val didCommit = checkTodayCommit(username)
                 if (didCommit) {
                     incrementCounter()

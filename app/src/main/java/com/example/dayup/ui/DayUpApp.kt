@@ -61,7 +61,7 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
                         modifier = Modifier.padding(innerPadding),
                         taskTitle = viewModel.taskTitle.value,
                         count = count,
-                        hasCommitToday = viewModel.hasCommitToday.value,
+                        hasCommitToday = viewModel.hasIncrementToday(),
                         onCheckCommit = {
                             val username = viewModel.username.value
                             if(username.isNotBlank()) {
