@@ -65,13 +65,23 @@ fun DayUpApp(viewModel: DayUpViewModel = viewModel()) {
                         onCheckCommit = {
                             val username = viewModel.username.value
                             if(username.isNotBlank()) {
-                                viewModel.tryIncrementIfCommit(username) {
-                                    scope.launch {
-                                        if (snackbarHostState.currentSnackbarData == null) {
-                                            snackbarHostState.showSnackbar("A verificação já foi realizada hoje")
+                                viewModel.tryIncrementIfCommit(
+                                    username,
+                                    onAlreadyDone = {
+                                        scope.launch {
+                                            if (snackbarHostState.currentSnackbarData == null) {
+                                                snackbarHostState.showSnackbar("A verificação já foi realizada hoje")
+                                            }
+                                        }
+                                    },
+                                    onNoCommitToday = {
+                                        scope.launch {
+                                            if (snackbarHostState.currentSnackbarData == null) {
+                                                snackbarHostState.showSnackbar("Nenhum commit realizado hoje")
+                                            }
                                         }
                                     }
-                                }
+                                )
                             }
                         }
                     )

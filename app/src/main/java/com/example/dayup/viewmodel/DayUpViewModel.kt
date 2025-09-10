@@ -82,7 +82,7 @@ class DayUpViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun tryIncrementIfCommit(username: String, onAlreadyDone: () -> Unit) {
+    fun tryIncrementIfCommit(username: String, onAlreadyDone: () -> Unit, onNoCommitToday: () -> Unit) {
         viewModelScope.launch {
             if(canIncrementToday()) {
                 val didCommit = checkTodayCommit(username)
@@ -91,6 +91,7 @@ class DayUpViewModel(context: Context) : ViewModel() {
                     markCommitDoneToday()
                 } else {
                     hasCommitToday.value = false
+                    onNoCommitToday()
                 }
             } else {
                 onAlreadyDone()
